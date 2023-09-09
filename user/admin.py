@@ -1,29 +1,74 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import *
+
+from .forms import CustomUserChangeForm, CustomUserCreationForm
+from .models import User
 
 
-@admin.register(User)
-class UserAdmin(DjangoUserAdmin):
+class UserAdmin(BaseUserAdmin):
+    ordering = ["email"]
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = User
+    list_display = [
+        "id",
+        "email",
+        "username",
+        "is_staff",
+        "is_active",
+    ]
+    list_display_links = ["id", "email"]
+    list_filter = [
+        "email",
+        "username",
+        "is_staff",
+        "is_active",
+    ]
     fieldsets = (
-        (_('login'), {'fields': ('username', 'email', 'password')}),
-        # (_('Personal Info'), {'fields': ('username',)}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        # (_('Important Dates'), {'fields': ('created_at',)})
+        (
+            _("Login Credentials"),
+            {
+                "fields": (
+                    "email",
+                    "password",
+                )
+            },
+        ),
+        (
+            _("Personal Information"),
+            {
+                "fields": (
+                    "username",
+                    "first_name",
+                    "last_name",
+                )
+            },
+        ),
+        (
+            _("Permissions and Groups"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        (_("Important Dates"), {"fields": ("last_login", "date_joined")}),
     )
-
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'password')
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
+            },
+        ),
     )
-
-    list_display = ('username', 'email')
-
-    search_fields = ('email', 'username')
-    ordering = ('-created_at',)
+    search_fields = ["email", "username", "first_name", "last_name"]
 
 
-admin.site.register(UserProfile)
+admin.site.register(User, UserAdmin)
