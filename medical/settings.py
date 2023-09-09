@@ -84,10 +84,12 @@ DATABASES = {
         # 'ENGINE': config('SQL_ENGINE'),
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'medical',
-        'USER': 'postgres',
-        'PASSWORD': 'Sparrow0500',
         'HOST': 'localhost',
+        'USER': 'postgres',
         'PORT': '5432',
+        'PASSWORD': '123098',
+        
+        
         # 'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
