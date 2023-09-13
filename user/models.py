@@ -6,7 +6,7 @@ from base.models import *
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email: str, password: str = '') -> 'User':
         if not email:
             raise ValueError("Users must have an email address")
 
@@ -20,7 +20,7 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email: str, password: str) -> 'User':
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -114,5 +114,5 @@ class UserProfile(BaseModel):
     def __str__(self):
         return f"{self.user}"
     
-    def full_name(self):
+    def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"

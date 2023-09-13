@@ -8,15 +8,15 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    gender = serializers.CharField(source="profile.gender")
+    gender = serializers.CharField(source="user_profile.gender")
     # phone_number = PhoneNumberField(source="profile.phone_number")
-    profile_photo = serializers.ImageField(source="profile.profile_photo")
+    profile_photo = serializers.ImageField(source="user_profile.bio_file")
     # country = CountryField(source="profile.country")
-    city = serializers.CharField(source="profile.city")
+    # city = serializers.CharField(source="profile.city")
     # top_seller = serializers.BooleanField(source="profile.top_seller")
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-    full_name = serializers.CharField(source="get_full_name")
+    first_name = serializers.CharField(source="user_profile.gender")
+    last_name = serializers.CharField(source="user_profile.gender")
+    full_name = serializers.CharField(source="user_profile.get_full_name")
 
     class Meta:
         model = User
@@ -28,10 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "full_name",
             "gender",
-            "phone_number",
-            "profile_photo",
-            "country",
-            "city",
+            "profile_photo"
             # "top_seller"
         ]
 
@@ -54,4 +51,4 @@ class UserSerializer(serializers.ModelSerializer):
 class CreateUserSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "password"]
+        fields = ["email","password"]

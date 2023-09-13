@@ -2,7 +2,6 @@ from random import randrange
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-
 from user.models import UserProfile
 
 # Create your models here.
@@ -35,8 +34,8 @@ TREATMENT_STATUS = {
 }
 
 PRE_STATUS = {
-  (1, 'Confirmed'),
-  (0, 'Pending'),
+    (1, 'Confirmed'),
+    (0, 'Pending'),
 
 }
 
@@ -50,8 +49,11 @@ class Patient(models.Model):
     def __str__(self):
         return self.patient_id
 
-    def full_name(self):
-        return f"{self.profile.first_name} {self.profile.last_name}"
+    def full_name(self) -> str:
+        if self.profile:
+            return f"{self.profile.first_name} {self.profile.last_name}"
+        else:
+            return str(self.patient_id)
 
     class Meta:
         db_table = 'patient'
@@ -77,7 +79,7 @@ class Complaints(models.Model):
 
 class VitalSign(models.Model):
     patient = models.ForeignKey('Patient', on_delete=models.SET_NULL, blank=True, null=True, related_name='vital_sign_patient')
-    time = models.TimeField(default=timezone.now)
+    time = models.DateTimeField(default=timezone.now)
     weight = models.DecimalField( max_digits=10, decimal_places=2,blank=True, null=True)
     diastolic = models.IntegerField( blank=True, null=True)
     pulse = models.IntegerField(blank=True, null=True)
@@ -92,7 +94,10 @@ class VitalSign(models.Model):
         ordering = ('-time',)
 
     def __str__(self):
-        return f"{self.patient.full_name()}-{self.time}"
+        if self.patient:
+            return str(self.patient.full_name())
+        else:
+            return str(self.time)
 
 class MedicalDiagnosis(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, related_name='diagnosis_patient', blank=True, null=True)
@@ -113,7 +118,7 @@ class MedicalDiagnosis(models.Model):
         ordering = ('-created_at',)
 
 class Treatment(models.Model):
-    diagnosis = models.ForeignKey(MedicalDiagnosis, on_delete=models.SET_NULL, related_name='treatment_diagnosis', blank='null', null=True)
+    diagnosis = models.ForeignKey(MedicalDiagnosis, on_delete=models.SET_NULL, related_name='treatment_diagnosis', blank=True, null=True)
     treatment = models.CharField(max_length=2000, blank=True, null=True)
     prescription = models.CharField(max_length=2000, blank=True,null=True)
     pharmacy_prescription = models.ForeignKey('Prescription', on_delete= models.SET_NULL, related_name='treatment_prescription', blank=True, null=True)
@@ -173,7 +178,10 @@ class Prescription(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='prescriptions', blank=True, null=True)
 
     def __str__(self):
-        return str(self.patient.full_name())
+        if self.patient:
+            return str(self.patient.full_name())
+        else:
+            return str(self.prescription_id)
 
     class Meta:
         db_table = 'prescription'
