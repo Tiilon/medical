@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import PermissionsMixin
 from base.models import *
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class MyUserManager(BaseUserManager):
@@ -36,7 +38,7 @@ class MyUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, null=True, blank=True, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -87,22 +89,20 @@ class UserProfile(BaseModel):
         null=True,
         blank=True,
     )
+    uid = models.UUIDField(editable=False , default=uuid.uuid4, unique=True)
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     other_name = models.CharField(max_length=255, null=True, blank=True)
     bio_file = models.FileField(upload_to='user/bio', blank=True, null=True)
     phone = models.CharField(max_length=25, unique=True, null=True, blank=True)
-    otp = models.CharField(max_length=10, null=True, blank=True)
-    email_token = models.CharField(max_length=300, null=True, blank=True)
-    is_email_verified = models.BooleanField(default=False)
     gender = models.CharField(max_length=10, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     profession = models.CharField(max_length=255,null=True, blank=True)
     # nationality = models.ForeignKey(Nationality, related_name='nationality', on_delete=models.CASCADE, null=True, blank=True)
-    personal_website = models.CharField(max_length=300, null=True, blank=True)
     slug = models.SlugField(blank=True, null=True)
     date_of_birth = models.DateTimeField(null=True, blank=True)
     marital_status = models.CharField(max_length=100,blank=True,null=True,choices=MARITAL)
+    is_completed = models.BooleanField(default=False)
 
 
 

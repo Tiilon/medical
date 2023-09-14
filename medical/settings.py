@@ -215,8 +215,8 @@ DJOSER = {
         "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
     "EMAIL": {
-        "activation": "users.email.ActivationEmail",
-        "confirmation": "users.email.ConfirmationEmail",
+        "activation": "user.email.ActivationEmail",
+        "confirmation": "user.email.ConfirmationEmail",
     },
 }
 
