@@ -30,11 +30,11 @@ class UserSerializer(serializers.ModelSerializer):
         #     "has_profile"
         # ]
 
-    # def get_full_name(self, obj):
-    #     return obj.user_profile.full_name() if hasattr(obj, 'user_profile') else obj.email
+    def get_full_name(self, obj):
+        return obj.user_profile.full_name() if hasattr(obj, 'user_profile') else obj.email
 
-    # def get_has_profile(self, obj):
-    #     return hasattr(obj, 'user_profile')
+    def get_has_profile(self, obj):
+        return hasattr(obj, 'user_profile')
 
     # def to_representation(self, instance):
     #     representation = super(UserSerializer, self).to_representation(instance)
