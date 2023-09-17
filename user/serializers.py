@@ -50,7 +50,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class CreateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        exclude = ['otp', 'email_token','is_email_verified','slug']
+        exclude = ['slug']
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+        
         
 class PatientSerializer(serializers.ModelSerializer):
     uid = serializers.CharField(source="profile.uid")
