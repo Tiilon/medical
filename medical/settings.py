@@ -88,7 +88,7 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'postgres',
         'PORT': '5432',
-        'PASSWORD': '123098',
+        'PASSWORD': 'Sparrow0500',
         
         
         # 'DISABLE_SERVER_SIDE_CURSORS': True,
