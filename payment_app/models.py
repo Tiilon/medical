@@ -1,6 +1,6 @@
 from django.db import models
 import secrets
-from .paystack import PayStack #pyright:ignore
+from .paystack import PayStack
 
 class Payment(models.Model):
     amount = models.PositiveIntegerField()
